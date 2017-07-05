@@ -8,6 +8,9 @@
 
 #import "TestView.h"
 
+#define pi 3.14159265359
+#define   DEGREES_TO_RADIANS(degrees)  (pi * (degrees/ 180))
+
 @implementation TestView
 
 
@@ -19,13 +22,61 @@
     
     
     
+//    UIBezierPath* aPath = [UIBezierPath bezierPath];
+    //椭圆形
+    //UIBezierPath* aPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(100, 100, 100, 200)];
+    //矩形
+    //UIBezierPath* aPath = [UIBezierPath bezierPathWithRect:CGRectMake(100, 100, 200, 100)];
+    //弧形线条
+    //UIBezierPath* aPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(100, 100) radius:50 startAngle:DEGREES_TO_RADIANS(0) endAngle:DEGREES_TO_RADIANS(180) clockwise:YES];
+    /*
+    //二次贝塞尔曲线
     UIBezierPath* aPath = [UIBezierPath bezierPath];
+    [aPath moveToPoint:CGPointMake(100, 100)];
+    [aPath addQuadCurveToPoint:CGPointMake(200, 100) controlPoint:CGPointMake(200, 200)];
+     */
+    /*
+    //三次贝塞尔曲线
+    UIBezierPath* aPath = [UIBezierPath bezierPath];
+    [aPath moveToPoint:CGPointMake(100, 100)];
+    [aPath addCurveToPoint:CGPointMake(300, 50) controlPoint1:CGPointMake(180, 0) controlPoint2:CGPointMake(220, 200)];
+     */
+    /*CG底层的方法 自定义路径
+    //用CGPath先设定好路径，在赋值给BezierPath
+    CGMutablePathRef cgPath = CGPathCreateMutable();//可添加的路径，多重路径
+    CGPathAddEllipseInRect(cgPath, NULL, CGRectMake(0, 0, 300, 300));//外围大圆
+    CGPathAddEllipseInRect(cgPath, NULL, CGRectMake(50, 50, 200, 200));//内圈小圆
+    
+    UIBezierPath* aPath = [UIBezierPath bezierPath];
+    aPath.CGPath = cgPath;
+    aPath.usesEvenOddFillRule = YES;
+    CGPathRelease(cgPath);
+     */
+    /*把path的路径拿出来，经过加工后再赋值回去
+    UIBezierPath *aPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, 300, 300)];
+    CGPathRef cgPath = aPath.CGPath;//底层路径拿出来
+    CGMutablePathRef  mutablePath = CGPathCreateMutableCopy(cgPath);//转换成可变底层路径
+    CGPathAddEllipseInRect(mutablePath, NULL, CGRectMake(50, 50, 200, 200));
+    aPath.CGPath = mutablePath;//画一个圆，赋值回去
+    CGPathRelease(mutablePath);
+    */
+    
+    /*画板挪动 产生效果*/
+    UIBezierPath* aPath = [UIBezierPath bezierPathWithOvalInRect:
+                           CGRectMake(0, 0, 200, 100)];
+    //把当前的画板拿出来，挪一下位置
+    CGContextRef aRef = UIGraphicsGetCurrentContext();
+    CGContextTranslateCTM(aRef, 50, 50);
+    
+    //CGContextSaveGState(aRef); 保存移动后的状态
+    //CGContextRestoreGState(aRef); 画别的东西前 重置一下画板
+    
     aPath.lineWidth = 3.0;
     aPath.lineCapStyle = kCGLineCapRound; //线条末梢
     aPath.lineJoinStyle = kCGLineCapRound; //连接点处理
     
     // Set the starting point of the shape.
-    [aPath moveToPoint:CGPointMake(100.0, 100.0)];
+//    [aPath moveToPoint:CGPointMake(100.0, 100.0)];
     
     /*
     // 五边形
@@ -35,11 +86,14 @@
     [aPath addLineToPoint:CGPointMake(0.0, 140.0)];
     [aPath closePath];//第五条线通过调用closePath方法得到的
     */
+    /*
     // triangle  等边三角形
     [aPath moveToPoint:CGPointMake(100.0, 100.0)];
     [aPath addLineToPoint:CGPointMake(200.0, 100 + 173.20508075689)];
     [aPath addLineToPoint:CGPointMake(0, 100 + 173.20508075689)];
     [aPath closePath];//第五条线通过调用closePath方法得到的
+     */
+    
     
     //设置内部填充颜色
     [[UIColor redColor] setFill];
